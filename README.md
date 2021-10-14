@@ -21,6 +21,7 @@ Automatically answers spelling bee questions, and switches between word lists. H
 <li>This bot is made to mine points on vocabulary.com ⛏</li><br>
 <li>Deleting Browser History will remove all saved words, definitions, and corrections. Please Beware!! 🛑</li><br>
 <li>This is still a work in progress, it's good and functional but it may still need some work. If you have any issues please contact me asap. 🙏</li><br>
+<li>You can not hold me liable for your actions. This tool is for educational purposes only. You have been warned !! ⚠ </li><br>
 </ul>
 
 <h3>Please consider:</h3>
