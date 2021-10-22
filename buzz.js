@@ -184,7 +184,7 @@ function bot(){
                 location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
             },500)
         }
-    },1000)
+    },1500)
 
     }
 
