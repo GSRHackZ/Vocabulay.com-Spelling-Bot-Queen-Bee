@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vocabulary.com Queen Bee
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.2
 // @description  Automatically answers spelling bee questions. Has 99% success rate.
 // @author       GSRHackZ
 // @match        https://www.vocabulary.com/*
@@ -184,7 +184,7 @@ function bot(){
                 location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
             },500)
         }
-    },1500)
+    },2000)
 
     }
 
@@ -193,7 +193,7 @@ if(location.href.includes("https://www.vocabulary.com/lists/")){
         if(document.getElementsByClassName("page_notfound")[0]!==undefined||document.getElementsByClassName("notlearnable limited-width with-header-margin")[0]!==undefined){
             location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
         }
-    },1000)
+    },2000)
 }
 
 function same(arr1,arr2){
