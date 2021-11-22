@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vocabulary.com Queen Bee
 // @namespace    http://tampermonkey.net/
-// @version      1.4
+// @version      1.5
 // @description  Automatically answers spelling bee questions. Has 99% success rate.
 // @author       GSRHackZ
 // @match        https://www.vocabulary.com/*
@@ -35,6 +35,8 @@ if(!url.includes("/bee")){
             if(!lists.includes(list)){
                 if(document.getElementsByClassName("entry")!==undefined){
                     fake.addEventListener("click",function(){
+                        words_defs=[];
+                        lists=[];
                         let entries = document.getElementsByClassName("entry");
                         for(let i=0;i<entries.length;i++){
                             let word = entries[i].children[0].innerText;
@@ -48,10 +50,10 @@ if(!url.includes("/bee")){
                             }
                             words_defs.push({"word":word,"def":def,"example":exmp,"list":list});
                         }
-                        if(localStorage.getItem("words&defs_bee").length>500000){
+                        if(localStorage.getItem("words&defs_bee")!==null){
                             localStorage.removeItem("words&defs_bee");
                         }
-                        if(localStorage.getItem("lists_bee").length>500000){
+                        if(localStorage.getItem("lists_bee")!==null){
                             localStorage.removeItem("lists_bee");
                         }
                         localStorage.setItem("words&defs_bee",JSON.stringify(words_defs));
@@ -168,10 +170,13 @@ function bot(){
                                         }
                                     }
                                     if(!inLookOut){
-                                        lookOut.push([defs,corrSpell,list]);
-                                        if(localStorage.getItem("lookOut").length>500000){
-                                            localStorage.removeItem("lookOut");
+                                        if(localStorage.getItem("lookOut")!==null){
+                                            if(localStorage.getItem("lookOut").length>500000){
+                                                lookOut = [];
+                                                localStorage.removeItem("lookOut");
+                                            }
                                         }
+                                        lookOut.push([defs,corrSpell,list]);
                                         localStorage.setItem("lookOut",JSON.stringify(lookOut));
                                     }
                                 }
