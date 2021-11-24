@@ -20,6 +20,7 @@ Automatically answers spelling bee questions, and switches between word lists. H
 <li>Has 99% accuracy, will get most answers correct and learns questions it got wrong. 🎯</li><br>
 <li>This bot is made to mine points on vocabulary.com ⛏</li><br>
 <li>If you want to afk mine ⛏, remember to use an auto clicker so that your device doesn't go to sleep. ➤</li><br>
+  <li>Stay on the same tab, in order to decrease chances of getting banned. 🔴</li><br>
 <li>Deleting Browser History will remove all saved words, definitions, and corrections. Please Beware!! 🛑</li><br>
 <li>This is still a work in progress, it's good and functional but it may still need some work. If you have any issues please contact me asap. 🙏</li><br>
 <li>You can not hold me liable for your actions. This tool is for educational purposes only. You may get banned!! You have been warned !! ⚠ </li><br>
