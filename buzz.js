@@ -1,13 +1,21 @@
 // ==UserScript==
 // @name         Vocabulary.com Queen Bee
 // @namespace    http://tampermonkey.net/
-// @version      1.5
+// @version      1.6
 // @description  Automatically answers spelling bee questions. Has 99% success rate.
 // @author       GSRHackZ
 // @match        https://www.vocabulary.com/*
 // @icon         https://i.ibb.co/YyGc2sH/queen-bee-removebg-preview.png
 // @grant        none
 // ==/UserScript==
+
+let wait = randNumb(2000,3000);
+
+function randNumb(min, max) { // generates random time that bot will take to answer question in order to not get flagged and get user banned ;)
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 let url = window.location.href,list=url.split("/")[4],lists=[],words_defs=[],inProgress=false,lookOut=[];
 
@@ -121,7 +129,7 @@ function bot(){
                     defs_ = partsOfList(list,"defs"),
                     exmps = getWord(exmp[1],partsOfList(list,"examples"),defs);
                 if(!defs||!exmps||exmps==undefined){
-                    location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                    undetected_routing()
                 }
                 //console.log(exmp,partsOfList(list,"examples"),partsOfList(list,"words"),defs_)
                 if(exmps!==undefined){
@@ -131,7 +139,7 @@ function bot(){
                         div=5;
                     }
                     if(surrendered>Math.floor(Number(document.getElementsByClassName("stats")[1].innerText.split(":\n")[1]/div))){
-                        location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                        undetected_routing()
                     }
                     let inLookOut = exmps;
                     for(let i=0;i<lookOut.length;i++){
@@ -141,25 +149,25 @@ function bot(){
                                     inLookOut = getWord_(lookOut[i][1]);
                                 }
                                 else{
-                                    location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                                    undetected_routing()
                                 }
                             }
                             else{
-                                location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                                undetected_routing()
                             }
                         }
                     }
                     inp.value = exmps;
                     setTimeout(function(){
-                        spell.click();
+                        humanClick(spell)
                     },700)
                     setTimeout(function(){
                         if(surrender.disabled){
-                            nxt.click();
+                            humanClick(nxt)
                             inProgress = false;
                         }
                         else{
-                            surrender.click();
+                            humanClick(surrender)
                             setTimeout(function(){
                                 let inLookOut = false;
                                 if(document.getElementById("correctspelling")!==undefined){
@@ -180,14 +188,14 @@ function bot(){
                                         localStorage.setItem("lookOut",JSON.stringify(lookOut));
                                     }
                                 }
-                                nxt.click();
+                                humanClick(nxt)
                                 inProgress = false;
                             },500)
                         }
                     },100)
                 }
                 else{
-                    location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                    undetected_routing()
                 }
             }
         }
@@ -195,18 +203,26 @@ function bot(){
             clearInterval(bot);
             console.log("Queen Bee go buzz buzz 😋!");
             setTimeout(function(){
-                location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                undetected_routing()
             },500)
         }
-    },2000)
+    },wait)
 
     }
 
 if(location.href.includes("https://www.vocabulary.com/lists/")){
     setInterval(function(){
-        if(document.getElementsByClassName("page_notfound")[0]!==undefined||document.getElementsByClassName("notlearnable limited-width with-header-margin")[0]!==undefined){
-            location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+        if(document.getElementsByClassName("page_notfound")[0]!==undefined||document.getElementsByClassName("notlearnable limited-width with-header-margin")[0]!==undefined||document.getElementsByClassName("actions")[0]!==undefined){
+            if(document.getElementById("guessWord")==undefined){
+                undetected_routing();
+            }
         }
+    },2000)
+}
+
+if(location.href.includes("https://www.vocabulary.com/play/")){
+    setInterval(()=>{
+        undetected_routing();
     },2000)
 }
 
@@ -254,7 +270,7 @@ function getWord(exmp,exmps,defs){
                     }
                 }
             }
-            location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+            undetected_routing();
         }
         else{
             return result;
@@ -275,7 +291,7 @@ function cleanExmp(exmp,mode){
                 blank =`<b>${exmp.innerText.split("<b>")[1].split("</b>")[0]}</b>`;
             }
             else{
-                location.href=`/lists/${Math.floor(Math.random()*5000000)+1000000}`
+                undetected_routing();
             }
         }
         reformExmp = exmp.innerText.split(blank).join(div);
@@ -347,3 +363,90 @@ function partsOfList(listId,part){
         }
     }
 }
+
+
+
+function undetected_routing(){
+    let logo = document.getElementsByClassName("main")[0].children[0].children[0];
+    let lists_ = document.getElementsByClassName("listsTab")[0].children[0];
+    if(location.href.includes("/bee")){
+        localStorage.setItem("route_bee","lists");
+        setTimeout(()=>{
+            logo.click();
+        },1000)
+    }
+    if(location.href.includes("/play/")){
+        if(localStorage.getItem("route_bee")!==null){
+            if(localStorage.getItem("route_bee")=="lists"){
+                setTimeout(()=>{
+                    lists_.click();
+                },1000)
+            }
+        }
+    }
+    if(location.href.includes("https://www.vocabulary.com/lists/")){
+        if(localStorage.getItem("route_bee")!==null){
+            if(localStorage.getItem("route_bee")=="lists"){
+                setTimeout(()=>{
+                    randList();
+                },1000)
+            }
+        }
+    }
+}
+
+
+function randList(){
+    let actions = document.getElementsByClassName("actions"),random;
+    if(document.getElementsByClassName("button bee")[0]!==undefined){
+        let bees = document.getElementsByClassName("button bee");
+        random = bees[Math.floor(Math.random() * bees.length)];
+    }
+    else if(document.getElementsByClassName("bee")[0]!==undefined){
+        random = document.getElementsByClassName("bee")[0].children[2].children[0];
+    }
+    else{
+        random = actions[Math.floor(Math.random() * actions.length)].children[0];
+    }
+    random.click();
+}
+
+
+function simClick(element, eventName, coordX, coordY) {
+    element.dispatchEvent(new MouseEvent(eventName, {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+        clientX: coordX,
+        clientY: coordY,
+        button: 0
+    }));
+};
+
+function humanClick(elem){
+    let cordX = getOffset(elem).left
+    let cordY = getOffset(elem).top
+    simClick(elem, "mouseover", cordX, cordY);
+    simClick(elem, "mousedown", cordX, cordY);
+    simClick(elem, "mouseup", cordX, cordY);
+    simClick(elem, "click", cordX, cordY);
+    simClick(elem, "mouseout", cordX, cordY);
+}
+
+function getOffset( el ) {
+    let _x = 0,_y = 0;
+    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+
+
+
+
+
+
+
+
