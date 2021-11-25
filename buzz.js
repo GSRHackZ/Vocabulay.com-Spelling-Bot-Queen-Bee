@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vocabulary.com Queen Bee
 // @namespace    http://tampermonkey.net/
-// @version      1.6
+// @version      1.7
 // @description  Automatically answers spelling bee questions. Has 99% success rate.
 // @author       GSRHackZ
 // @match        https://www.vocabulary.com/*
@@ -17,7 +17,7 @@ function randNumb(min, max) { // generates random time that bot will take to ans
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-let url = window.location.href,list=url.split("/")[4],lists=[],words_defs=[],inProgress=false,lookOut=[];
+let url = window.location.href,list=url.split("/")[4],lists=[],words_defs=[],inProgress=false,lookOut=[],humanInput=false;
 
 if(localStorage.getItem("lists_bee")!==null){lists = JSON.parse(localStorage.getItem("lists_bee"))}
 if(localStorage.getItem("words&defs_bee")!==null){words_defs = JSON.parse(localStorage.getItem("words&defs_bee"))}
@@ -69,12 +69,16 @@ if(!url.includes("/bee")){
                         localStorage.setItem("lists_bee",JSON.stringify(lists));
                         grabbed=true;
                     })
-                    fake.click();
+                    setTimeout(()=>{
+                        fake.click();
+                    },randNumb(1000,1500))
                 }
             }
             if(list.trim().length>0){
                 if(grabbed){
-                    bee.click();
+                    setTimeout(()=>{
+                        bee.click();
+                    },randNumb(1000,1500))
                 }
             }
         }
@@ -85,7 +89,7 @@ else if(url.includes("/bee")){
         location.href=url.split("/bee")[0];
     }
     else{
-        bot()
+        bot();
     }
 }
 
@@ -128,6 +132,9 @@ function bot(){
                     surrender = document.getElementById("surrender"),
                     defs_ = partsOfList(list,"defs"),
                     exmps = getWord(exmp[1],partsOfList(list,"examples"),defs);
+                nxt.addEventListener("click",()=>{
+                    humanInput=false;
+                })
                 if(!defs||!exmps||exmps==undefined){
                     undetected_routing()
                 }
@@ -157,43 +164,51 @@ function bot(){
                             }
                         }
                     }
-                    inp.value = exmps;
-                    setTimeout(function(){
-                        humanClick(spell)
-                    },700)
-                    setTimeout(function(){
-                        if(surrender.disabled){
-                            humanClick(nxt)
-                            inProgress = false;
-                        }
-                        else{
-                            humanClick(surrender)
+                    //inp.value = exmps;
+                    if(!humanInput){
+                        human_Enter(inp,exmps,randNumb(150,250));
+                    }
+                    let wait = setInterval(()=>{
+                        if(humanInput){
                             setTimeout(function(){
-                                let inLookOut = false;
-                                if(document.getElementById("correctspelling")!==undefined){
-                                    let corrSpell = document.getElementById("correctspelling").innerText.split(": ")[1];
-                                    for(let i=0;i<lookOut.length;i++){
-                                        if(same(lookOut[i][0],defs)){
-                                            inLookOut = true;
-                                        }
-                                    }
-                                    if(!inLookOut){
-                                        if(localStorage.getItem("lookOut")!==null){
-                                            if(localStorage.getItem("lookOut").length>500000){
-                                                lookOut = [];
-                                                localStorage.removeItem("lookOut");
+                                humanClick(spell)
+                            },randNumb(700,1000))
+                            setTimeout(function(){
+                                if(surrender.disabled){
+                                    inProgress = false;
+                                    clearInterval(wait)
+                                    humanClick(nxt);
+                                }
+                                else{
+                                    humanClick(surrender)
+                                    setTimeout(function(){
+                                        let inLookOut = false;
+                                        if(document.getElementById("correctspelling")!==undefined){
+                                            let corrSpell = document.getElementById("correctspelling").innerText.split(": ")[1];
+                                            for(let i=0;i<lookOut.length;i++){
+                                                if(same(lookOut[i][0],defs)){
+                                                    inLookOut = true;
+                                                }
+                                            }
+                                            if(!inLookOut){
+                                                if(localStorage.getItem("lookOut")!==null){
+                                                    if(localStorage.getItem("lookOut").length>500000){
+                                                        lookOut = [];
+                                                        localStorage.removeItem("lookOut");
+                                                    }
+                                                }
+                                                lookOut.push([defs,corrSpell,list]);
+                                                localStorage.setItem("lookOut",JSON.stringify(lookOut));
                                             }
                                         }
-                                        lookOut.push([defs,corrSpell,list]);
-                                        localStorage.setItem("lookOut",JSON.stringify(lookOut));
-                                    }
+                                        inProgress = false;
+                                        clearInterval(wait);
+                                        humanClick(nxt)
+                                    },500)
                                 }
-                                humanClick(nxt)
-                                inProgress = false;
-                            },500)
+                            },100)
                         }
-                    },100)
-                }
+                    },100)}
                 else{
                     undetected_routing()
                 }
@@ -410,6 +425,29 @@ function randList(){
     }
     random.click();
 }
+
+
+
+function human_Enter(elem,word,delay){
+    elem.value="";
+    //console.log(word);
+    let word_ = word.split("");
+    for(let i=0;i<word_.length;i++){
+        setTimeout(()=>{
+            simKey(elem,word_[i]);
+            elem.value+=word_[i];
+        },delay)
+        humanInput = true;
+    }
+}
+
+function simKey(elem,key){
+    elem.dispatchEvent(
+        new KeyboardEvent("keyup", {key: key})
+    );
+}
+
+
 
 
 function simClick(element, eventName, coordX, coordY) {
