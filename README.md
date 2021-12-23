@@ -9,15 +9,6 @@ Automatically answers spelling bee questions, and switches between word lists. H
 <li>Enjoy!!</li><br>
 </ol>
 
-
-<h3>Steps for use: </h3>
-<ol style="margin-bottom:10px;">
-<li>Install this script.</li><br>
-<li>Open a spelling bee for any vocabulary list.</li><br>
-<li>Go to sleep while the bot does the spelling bee and automatically does more.</li><br>
-<li>Enjoy!!</li><br>
-</ol>
-
 <h3>Important notice:</h3>
 <p>If you are banned when using this script, (rare now that below features have been added), you will keep getting banned, because they have added your I.P. address to a list and will keep tracking it. To avoid this, use <b>Incognito Mode</b> or a <b>VPN</b>! (<b>VPN</b> works best.)</p>
 
