@@ -10,7 +10,7 @@ Automatically answers spelling bee questions, and switches between word lists. H
 </ol>
 
 <h3>Important notice:</h3>
-<p>If you are banned when using this script, (rare now that below features have been added), you will keep getting banned, because they have added your I.P. address to a list and will keep tracking it. To avoid this, use <b>Incognito Mode</b> or a <b>VPN</b>! (<b>VPN</b> works best.)</p>
+<p>If you are banned when using this script, (rare now that below features have been added), you will keep getting banned, because they have added your I.P. address to a list and will keep tracking it. To avoid this, use <b>Incognito Mode</b> or a <b>VPN</b>! (<b>VPN</b> obviously works best.)</p>
 
 <h3>Key points:</h3>
 <ul style="margin-bottom:10px;">
