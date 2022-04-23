@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vocabulary.com Queen Bee
 // @namespace    http://tampermonkey.net/
-// @version      1.7
+// @version      1.8
 // @description  Automatically answers spelling bee questions. Has 99% success rate.
 // @author       GSRHackZ
 // @match        https://www.vocabulary.com/*
@@ -38,8 +38,8 @@ if(!url.includes("/bee")){
     let grabbed = false;
     setInterval(function(){
         if(document.getElementsByClassName("bee")[0]!==undefined){
-            let bee = document.getElementsByClassName("button outline")[1]
-            let fake = document.getElementsByClassName("bee")[0].children[0].children[0];
+            let bee = document.getElementsByClassName("activity bee")[0]
+            let fake = document.getElementsByClassName("activity bee")[0].children[0];
             if(!lists.includes(list)){
                 if(document.getElementsByClassName("entry")!==undefined){
                     fake.addEventListener("click",function(){
@@ -47,8 +47,8 @@ if(!url.includes("/bee")){
                         lists=[];
                         let entries = document.getElementsByClassName("entry");
                         for(let i=0;i<entries.length;i++){
-                            let word = entries[i].children[0].innerText;
-                            let def = entries[i].children[1].innerText;
+                            let word = entries[i].children[0].innerText.trim();
+                            let def = entries[i].children[1].innerText.trim();
                             let exmp;
                             if(entries[i].children[2].children.length>0){
                                 exmp = cleanExmp(entries[i].children[2].children[0],"list");
@@ -96,10 +96,12 @@ else if(url.includes("/bee")){
 function getWord_(word){
     let result = false;
     let words = partsOfList(list,"words");
-    for(let i=0;i<words.length;i++){
-        if(word!==null){
-            if(words[i].includes(word)||word.includes(words[i])){
-                result = words[i];
+    if(words!==undefined){
+        for(let i=0;i<words.length;i++){
+            if(word!==null&&word!==undefined){
+                if(words[i].includes(word)||word.includes(words[i])){
+                    result = words[i];
+                }
             }
         }
     }
