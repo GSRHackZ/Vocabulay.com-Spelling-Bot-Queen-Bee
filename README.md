@@ -30,7 +30,7 @@ Automatically answers spelling bee questions, and switches between word lists. H
 </ul>
 
 <h3>Important Updates: v1.6 - v1.7</h3>
-<p>On 11/21/2020, vocabulary.com decided to patch this bot. Their anti cheat system started to flag users with this script, so I added four things to make sure that doesn't happen.😈<br><br>Here they are:</p>
+<p>On 11/21/2021, vocabulary.com decided to patch this bot. Their anti cheat system started to flag users with this script, so I added four things to make sure that doesn't happen.😈<br><br>Here they are:</p>
 <ol>
 <li>Now waits a random interval between 2 to 4 seconds before answering question. Before it was a set interval of 2 seconds which would be flagged because it was constant. Not anymore 😉</li><br>
 <li>Now doesn't open a random new list by switching url. (This was main reason users were getting flagged). It now uses a new function I wrote called <b>undetected_routing</b> which opens lists in a more secretive way. 😏</li><br>
